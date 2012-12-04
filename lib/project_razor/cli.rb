@@ -80,7 +80,7 @@ class ProjectRazor::CLI
 
   def call_razor_slice(raw_name, args)
     return nil if raw_name.nil?
-
+    @logger.debug "args:" + args.to_s
     name = file2const(raw_name)
     razor_module = Object.full_const_get(SLICE_PREFIX + name).new(args)
     razor_module.web_command = @web_command

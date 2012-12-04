@@ -1,11 +1,14 @@
+
 # Root ProjectRazor namespace
 module ProjectRazor
   class Slice
     # ProjectRazor Slice Node (NEW)
     # Used for policy management
     class Node < ProjectRazor::Slice
+      include ProjectRazor::Logging
       # @param [Array] args
       def initialize(args)
+        logger.debug "init Node"
         super(args)
         @hidden          = false
         @slice_name = "Node"
@@ -63,18 +66,23 @@ module ProjectRazor
         @command = :get_node_by_uuid
         includes_uuid = false
         # ran one argument far when parsing if we were working with a web command
+        logger.debug @prev_args.to_s
         @command_array.unshift(@prev_args.pop) if @web_command
         # load the appropriate option items for the subcommand we are handling
         option_items = load_option_items(:command => :get)
+        logger.debug option_items
         # parse and validate the options that were passed in as part of this
         # subcommand (this method will return a UUID value, if present, and the
         # options map constructed from the @commmand_array)
         node_uuid, options = parse_and_validate_options(option_items, "razor node [get] (UUID) [--field,-f FIELD]", :require_all)
+        logger.debug node_uuid
+        logger.debug options        
         includes_uuid = true if node_uuid
         node = get_object("node_with_uuid", :node, node_uuid)
         raise ProjectRazor::Error::Slice::InvalidUUID, "no matching Node (with a uuid value of '#{node_uuid}') found" unless node && (node.class != Array || node.length > 0)
         selected_option = options[:field]
         # if no options were passed in, then just print out the summary for the specified node
+        logger.debug "field: #{selected_option}"
         return print_object_array [node] unless selected_option
         if /^(attrib|attributes)$/.match(selected_option)
           get_node_attributes(node)
