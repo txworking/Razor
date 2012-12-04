@@ -27,3 +27,7 @@ doc/
 /image
 /node_modules
 /razor_daemon.pid
+
+/.project
+/.settings
+/.tags*
