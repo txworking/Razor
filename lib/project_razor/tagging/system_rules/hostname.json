@@ -1,0 +1,12 @@
+{
+    "@name": "hostname",
+    "@tag": "hostname_%V=hostname-%",
+    "@tag_matchers": [
+        {
+            "@key": "hostname",
+            "@value": "\\w+",
+            "@compare": "like",
+            "@inverse": "false"
+        }
+    ]
+}
