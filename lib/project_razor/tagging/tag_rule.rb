@@ -11,8 +11,8 @@ module ProjectRazor
         @name = "Tag Rule: #{@uuid}"
         @tag = ""
         @tag_matchers = []
-        @_namespace = :tag
-        @noun = "tag"
+        @_namespace = :tag_rule
+        @noun = "tag_rule"
 
         from_hash(hash) unless hash == nil
         tag_matcher_from_hash unless hash == nil
