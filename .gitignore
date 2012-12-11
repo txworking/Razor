@@ -1,7 +1,9 @@
 *.gem
 *.rbc
 .bundle
+.buildpath
 .config
+.project
 coverage
 InstalledFiles
 lib/bundler/man
@@ -31,3 +33,4 @@ doc/
 /.project
 /.settings
 /.tags*
+/Gemfile.lock
