@@ -164,7 +164,7 @@ module ProjectRazor
         # option_items hash must be an exclusive choice)
         check_option_usage(option_items, options, includes_uuid, false)
 
-        # get the tagfule to update
+        # get the tagrule to update
         tagrule = get_object("tagrule_with_uuid", :tag, tagrule_uuid)
         raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Tag Rule with UUID: [#{tagrule_uuid}]" unless tagrule && (tagrule.class != Array || tagrule.length > 0)
         tagrule.name = options[:name] if options[:name]
