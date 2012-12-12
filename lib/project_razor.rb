@@ -46,6 +46,7 @@ require "project_razor/policies"
 require "project_razor/image_service"
 require "project_razor/power_control"
 require "project_razor/broker"
+require "project_razor/tagname"
 
 
 # Root ProjectRazor namespace

@@ -1,0 +1,8 @@
+---
+- :name: :name
+  :default: false
+  :short_form: -n
+  :long_form: --name NAME
+  :description: Name for the tag being created
+  :uuid_is: not_allowed
+  :required: true
