@@ -114,7 +114,7 @@ module ProjectRazor
 		        check_option_usage(option_items, options, includes_uuid, false)
 				#check unique
 				region_tmp = return_objects_using_filter(:region, {"name" => options[:name]})
-		        if !region_tmp.empty?
+		        if !region_tmp.empty? && region_uuid != region_tmp[0].uuid
 		        	raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not change to Region name [#{options[:name]}]"
 		        end		        
 		        # get the region to update

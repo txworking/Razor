@@ -118,7 +118,7 @@ module	ProjectRazor
 
 		        #check unique
 				tag_tmp = return_objects_using_filter(:tag_name, {"name" => options[:name]})
-		        if !tag_tmp.empty?
+		        if !tag_tmp.empty? && tag_tmp[0].uuid != tag_uuid
 		        	raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not change to Tagname [#{options[:name]}]"
 		        end
 
