@@ -1,0 +1,8 @@
+---
+- :name: :name
+  :default: 
+  :short_form: -n
+  :long_form: --name NAME
+  :description: New name for the region being updated.
+  :uuid_is: required
+  :required: true
