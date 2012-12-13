@@ -8,6 +8,8 @@ class ProjectRazor::Node < ProjectRazor::Object
   #attr_accessor :current_state
   #attr_accessor :next_state
   attr_accessor :dhcp_mac
+  attr_accessor :custom_tags
+  attr_accessor :region
 
   # init
   # @param hash [Hash]
@@ -18,6 +20,7 @@ class ProjectRazor::Node < ProjectRazor::Object
     @dhcp_mac = nil
     @hw_id = []
     @attributes_hash = {}
+    @custom_tags = []
     from_hash(hash)
   end
 
@@ -25,6 +28,10 @@ class ProjectRazor::Node < ProjectRazor::Object
     # Dynamically return tags for this node
     engine = ProjectRazor::Engine.instance
     engine.node_tags(self)
+  end
+
+  def custom_tags=(new_tags)
+    @custom_tags = new_tags.uniq
   end
 
   # We override the to_hash to add the 'tags key/value for sharing node tags
@@ -46,13 +53,16 @@ class ProjectRazor::Node < ProjectRazor::Object
   end
 
   def print_header
-    return "UUID", "Last Checkin", "Status", "Tags"
+    return "UUID", "Last Checkin", "Status","Region", "Tags", "Custom_tags"
   end
 
   def print_items
     temp_tags = self.tags
     temp_tags = ["n/a"] if temp_tags == [] || temp_tags == nil
+    temp_custom_tags = self.custom_tags
+    temp_custom_tags = ["n/a"] if temp_custom_tags == [] || temp_custom_tags == nil
     time_diff = Time.now.to_i - @timestamp.to_i
+    region_name = @region ? @region.name.to_s : "none"
     status = "-"
     case current_status
       when "bound"
@@ -64,18 +74,21 @@ class ProjectRazor::Node < ProjectRazor::Object
       else
         status = "U"
     end
-    return @uuid, pretty_time(time_diff), status, "[#{temp_tags.join(",")}]"
+    return @uuid, pretty_time(time_diff), status, region_name, "[#{temp_tags.join(",")}]", "[#{temp_custom_tags.join(",")}]"
   end
 
   def print_item_header
-    return "UUID", "Last Checkin", "Status", "Tags", "Hardware IDs"
+    return "UUID", "Last Checkin", "Status", "Region", "Tags", "Custom_tags", "Hardware IDs"
   end
 
   def print_item
     temp_tags = self.tags
     temp_tags = ["n/a"] if temp_tags == [] || temp_tags == nil
-    return @uuid, Time.at(@timestamp.to_i).strftime("%m-%d-%y %H:%M:%S"), current_status,
-        "[#{temp_tags.join(",")}]", "[#{hw_id.join(", ")}]"
+    temp_custom_tags = self.custom_tags
+    temp_custom_tags = ["n/a"] if temp_custom_tags == [] || temp_custom_tags == nil    
+    region_name = @region ? @region.name.to_s : "none"
+    return @uuid, Time.at(@timestamp.to_i).strftime("%m-%d-%y %H:%M:%S"), current_status, region_name, 
+        "[#{temp_tags.join(",")}]", "[#{temp_custom_tags.join(",")}]", "[#{hw_id.join(", ")}]"
   end
 
   def line_color

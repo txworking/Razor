@@ -18,7 +18,7 @@ module ProjectRazor
         # no support for adding, updating, or removing nodes via the slice
         # API, so the last three arguments are nil
         @slice_commands = get_command_map("node_help", "get_all_nodes",
-                                          "get_node_by_uuid", nil, nil, nil, nil)
+                                          "get_node_by_uuid", nil, "update_node", nil, nil)
         # and add a few more commands specific to this slice
         @slice_commands[["register", /^[Rr]$/]] = "register_node"
         @slice_commands[["checkin", /^[Cc]$/]] = "checkin_node"
@@ -109,6 +109,39 @@ module ProjectRazor
         else
           print_object_array node.print_hardware_ids, "Node Hardware ID's:"
         end
+      end
+
+      def update_node
+        @command = :update_node
+        includes_uuid = false
+        # load the appropriate option items for the subcommand we are handling
+        option_items = load_option_items(:command => :update)
+        # parse and validate the options that were passed in as part of this
+        # subcommand (this method will return a UUID value, if present, and the
+        # options map constructed from the @commmand_array)
+        node_uuid, options = parse_and_validate_options(option_items, "razor node update UUID (options...)", :require_one)
+        includes_uuid = true if node_uuid
+        # check for usage errors (the boolean value at the end of this method
+        # call is used to indicate whether the choice of options from the
+        # option_items hash must be an exclusive choice)
+        check_option_usage(option_items, options, includes_uuid, false)
+        node = get_object("node_with_uuid", :node, node_uuid)
+        raise ProjectRazor::Error::Slice::InvalidUUID, "Invalid Node UUID [#{node_uuid}]" unless node && (node.class != Array || node.length > 0)
+
+        # check the values that were passed in
+        if options[:tags]
+          options[:tags] = options[:tags].split(",") if options[:tags].is_a? String
+          raise ProjectRazor::Error::Slice::MissingArgument, "node Tags [tag(,tag)]" unless options[:tags].count > 0
+        end
+        if options[:region_uuid]
+          region = get_object("region_by_uuid", :region, options[:region_uuid])
+          raise ProjectRazor::Error::Slice::InvalidUUID, "Invalid Region UUID [#{options[:region_uuid]}]" unless region && (region.class != Array || region.length > 0)
+        end
+        node.region = region if region
+        node.custom_tags = options[:tags] if options[:tags]
+        # Update object
+        raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not update node [#{node.uuid}]" unless node.update_self
+        print_object_array [node], "", :success_type => :updated        
       end
 
       def register_node

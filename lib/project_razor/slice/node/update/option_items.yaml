@@ -1,0 +1,15 @@
+---
+- :name: :region_uuid
+  :default:
+  :short_form: -r
+  :long_form: --region-uuid REGION_UUID
+  :description: ! 'The region attached to the node [default: none].'
+  :uuid_is: required
+  :required: true
+- :name: :tags
+  :default: 
+  :short_form: -t
+  :long_form: --tags TAG{,TAG,TAG}
+  :description: Node custom tags. Comma delimited.
+  :uuid_is: required
+  :required: true
