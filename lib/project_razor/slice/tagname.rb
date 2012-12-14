@@ -130,7 +130,16 @@ module	ProjectRazor
 			def remove_all_tags
 		        @command = :remove_all_tags
 		        raise ProjectRazor::Error::Slice::MethodNotAllowed, "Cannot remove all Tags via REST" if @web_command
-		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Tags" unless @data.delete_all_objects(:tag_name)
+		        begin
+					return_objects(:node).each do |node|
+		        		node.custom_tags =  []
+		        		setup_data
+		        		node.update_self
+			        end 
+		        rescue Exception
+		        	raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Tags" 
+		        end
+		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Tags" unless @data.delete_all_objects(:tag_name)	
 		        slice_success("All Tags removed", :success_type => :removed)
 			end
 
@@ -141,6 +150,15 @@ module	ProjectRazor
 		        tag = get_object("tag_with_uuid", :tag_name, tag_uuid)
 		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Tagname with UUID: [#{tag_uuid}]" unless tag && (tag.class != Array || tag.length > 0)
 		        setup_data
+   		        begin
+					return_objects(:node).each do |node|
+		        		node.custom_tags.delete(tag.name)
+		        		setup_data
+		        		node.update_self
+			        end 
+		        rescue Exception
+		        	raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove  Tagname [#{tag.uuid}]" 
+		        end
 		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove Tagname [#{tag.uuid}]" unless @data.delete_object(tag)
 		        slice_success("Tagname [#{tag.uuid}] removed", :success_type => :removed)
 			end

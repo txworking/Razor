@@ -132,6 +132,13 @@ module ProjectRazor
         if options[:tags]
           options[:tags] = options[:tags].split(",") if options[:tags].is_a? String
           raise ProjectRazor::Error::Slice::MissingArgument, "node Tags [tag(,tag)]" unless options[:tags].count > 0
+          options[:tags].uniq.each do |tag|
+            if return_objects_using_filter(:tag_name, {"name" => tag}).empty?
+              custom_tag = ProjectRazor::Tagname.new("@name" => tag)
+              setup_data
+              @data.persist_object(custom_tag)
+            end
+          end
         end
         if options[:region_uuid]
           region = get_object("region_by_uuid", :region, options[:region_uuid])

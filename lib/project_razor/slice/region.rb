@@ -1,3 +1,4 @@
+
 module ProjectRazor
 	class Slice
 		class Region < ProjectRazor::Slice
@@ -128,6 +129,15 @@ module ProjectRazor
 			def remove_all_regions
 		        @command = :remove_all_regions
 		        raise ProjectRazor::Error::Slice::MethodNotAllowed, "Cannot remove all Regions via REST" if @web_command
+				begin
+					return_objects(:node).each do |node|
+		        		node.region = nil
+		        		setup_data
+		        		node.update_self
+		        	end		        						
+				rescue Exception 
+					raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Regions"					
+				end
 		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Regions" unless @data.delete_all_objects(:region)
 		        slice_success("All Regions removed", :success_type => :removed)
 			end
@@ -139,6 +149,17 @@ module ProjectRazor
 		        region = get_object("region_with_uuid", :region, region_uuid)
 		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Region with UUID: [#{region_uuid}]" unless region && (region.class != Array || region.length > 0)
 		        setup_data
+				begin
+					return_objects(:node).each do |node|
+						if node.region && node.region[:uuid].equal(region_uuid)
+							node.region = nil
+			        		setup_data
+			        		node.update_self								
+						end
+		        	end		        						
+				rescue Exception 
+					raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove Region [#{region.uuid}]"
+				end
 		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove Region [#{region.uuid}]" unless @data.delete_object(region)
 		        slice_success("Region [#{region.uuid}] removed", :success_type => :removed)
 			end
