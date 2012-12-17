@@ -35,6 +35,4 @@ class ProjectRazor::Tagname < ProjectRazor::Object
 	    :red_on_black
 	end
 
-
-
 end

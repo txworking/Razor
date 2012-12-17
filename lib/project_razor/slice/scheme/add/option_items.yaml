@@ -1,0 +1,29 @@
+---
+- :name: :label
+  :default: 
+  :short_form: -l
+  :long_form: --label SCHEME_LABEL
+  :description: A label to name this scheme.
+  :uuid_is: not_allowed
+  :required: true
+- :name: :model_uuid
+  :default: 
+  :short_form: -m
+  :long_form: --model-uuid MODEL_UUID
+  :description: The model to attach to the scheme.
+  :uuid_is: not_allowed
+  :required: true
+- :name: :broker_uuid
+  :default: none
+  :short_form: -b
+  :long_form: --broker-uuid BROKER_UUID
+  :description: ! 'The broker to attach to the scheme [default: none].'
+  :uuid_is: not_allowed
+  :required: false
+- :name: :nodes_uuid
+  :default: 
+  :short_form: -n
+  :long_form: --nodes NODE{,NODE,NODE}
+  :description: Node uuids. Comma delimited.
+  :uuid_is: not_allowed
+  :required: true

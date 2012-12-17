@@ -48,7 +48,7 @@ require "project_razor/power_control"
 require "project_razor/broker"
 require "project_razor/tagname"
 require "project_razor/region"
-
+require "project_razor/scheme"
 # Root ProjectRazor namespace
 module ProjectRazor
 
