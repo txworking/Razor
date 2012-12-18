@@ -1,0 +1,15 @@
+---
+- :name: :label
+  :default: 
+  :short_form: -l
+  :long_form: --label TASK_LABEL
+  :description: A label to name this task.
+  :uuid_is: not_allowed
+  :required: true
+- :name: :scheme_uuid
+  :default: 
+  :short_form: -s
+  :long_form: --scheme-uuid SCHEME_UUID
+  :description: The scheme to attach to the task.
+  :uuid_is: not_allowed
+  :required: true

@@ -49,6 +49,7 @@ require "project_razor/broker"
 require "project_razor/tagname"
 require "project_razor/region"
 require "project_razor/scheme"
+require "project_razor/task"
 # Root ProjectRazor namespace
 module ProjectRazor
 
