@@ -15,7 +15,14 @@ module ProjectRazor
       @policies = ProjectRazor::Policies.instance
     end
 
+    def update_task(task,active_model)
+      task.update_status(nil,active_model)
+      get_data.persist_object(task)
+    end
 
+    def get_tasks
+      get_data.fetch_all_objects(:task)
+    end
 
     def get_active_models
       get_data.fetch_all_objects(:active)
@@ -121,6 +128,13 @@ module ProjectRazor
               # We found a policy that matches
               # we call the policy binding and exit loop
               mk_bind_policy(node, pl)
+              #TODO bind active_model to task
+              get_tasks.each do |task|
+                if task.nodes.include? node.uuid
+                  task.active_models[pl.uuid] = "init"
+                  task.update_self
+                end
+              end
               return
             end
           else

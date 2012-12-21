@@ -25,7 +25,7 @@ unless ENV['HOME']
   end
 end
 
-
+require 'pry'
 require 'set'
 require "project_razor/version"
 require "project_razor/object"

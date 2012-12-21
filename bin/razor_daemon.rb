@@ -113,7 +113,7 @@ class RazorDaemon < ProjectRazor::Object
   BIN_DIR = File.dirname(File.expand_path(__FILE__))
   NODE_COMMAND = %x[which node].strip
   NODE_INSTANCE_NAMES = %W[api.js image_svc.js]
-  NODE_COMMAND_MAP = { 'api.js' => "#{NODE_COMMAND} #{BIN_DIR}/api.js 1>app.log 2>&1",
+  NODE_COMMAND_MAP = { 'api.js' => "#{NODE_COMMAND} #{BIN_DIR}/api.js",
                        'image_svc.js' => "#{NODE_COMMAND} #{BIN_DIR}/image_svc.js"}
 
   # used to obtain a copy of the Razor configuration

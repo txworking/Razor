@@ -153,6 +153,10 @@ class ProjectRazor::Slice < ProjectRazor::Object
       :removed => {
         :http_code => 202,
         :message => "Removed"
+      },
+      :started => {
+        :http_code => 201,
+        :message => "Started"
       }
     }
   end

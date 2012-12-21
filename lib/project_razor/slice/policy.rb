@@ -232,7 +232,14 @@ module ProjectRazor
         engine.get_active_models.each { |am| active_model = am if am.uuid == active_model_uuid }
         raise ProjectRazor::Error::Slice::ActiveModelInvalid, "Active Model Invalid" unless active_model
         logger.debug "Active bound policy found for callback: #{callback_namespace}"
-        make_callback(active_model, callback_namespace)
+        callback = make_callback(active_model, callback_namespace)
+        # TODO update task status
+        engine.get_tasks.each do |task|
+          if task.active_models[active_model.uuid]
+            engine.update_task(task,active_model)
+          end
+        end
+        callback
       end
 
       def make_callback(active_model, callback_namespace)

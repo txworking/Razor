@@ -95,7 +95,7 @@ module ProjectRazor
 
         @image_svc_path = $img_svc_path
 
-        @register_timeout = 120
+        @register_timeout = 1200
         @force_mk_uuid = ""
 
         @default_ipmi_power_state = 'off'
@@ -107,7 +107,7 @@ module ProjectRazor
         # this is the default value for the amount of time (in seconds) that
         # is allowed to pass before a node is removed from the system.  If the
         # node has not checked in for this long, it'll be removed
-        @node_expire_timeout = 300
+        @node_expire_timeout = 3000
 
         # DEPRECATED: use rz_mk_boot_kernel_args instead!
         # used to set the Microkernel boot debug level; valid values are
