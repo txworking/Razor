@@ -1,11 +1,11 @@
-class ProjectRazor::Region < ProjectRazor::Object
+class ProjectRazor::Group < ProjectRazor::Object
 	attr_accessor :name
 
 	def initialize(hash)
 		super()
-		@_namespace = :region
-		@name       = "Region Name : #{uuid}"
-		@noun       = :region_name
+		@_namespace = :group
+		@name       = "Group Name : #{uuid}"
+		@noun       = :group_name
 		from_hash(hash)
 	end
 

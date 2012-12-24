@@ -1,9 +1,9 @@
 ---
-- :name: :region_uuid
+- :name: :group_uuid
   :default:
-  :short_form: -r
-  :long_form: --region-uuid REGION_UUID
-  :description: ! 'The region attached to the node [default: none].'
+  :short_form: -g
+  :long_form: --group-uuid GROUP_UUID
+  :description: ! 'The group attached to the node [default: none].'
   :uuid_is: required
   :required: true
 - :name: :tags

@@ -9,7 +9,7 @@ class ProjectRazor::Node < ProjectRazor::Object
   #attr_accessor :next_state
   attr_accessor :dhcp_mac
   attr_accessor :custom_tags
-  attr_accessor :region
+  attr_accessor :group
 
   # init
   # @param hash [Hash]
@@ -53,7 +53,7 @@ class ProjectRazor::Node < ProjectRazor::Object
   end
 
   def print_header
-    return "UUID", "Last Checkin", "Status","Region", "Tags", "Custom_tags"
+    return "UUID", "Last Checkin", "Status","Group", "Tags", "Custom_tags"
   end
 
   def print_items
@@ -62,7 +62,7 @@ class ProjectRazor::Node < ProjectRazor::Object
     temp_custom_tags = self.custom_tags
     temp_custom_tags = ["n/a"] if temp_custom_tags == [] || temp_custom_tags == nil
     time_diff = Time.now.to_i - @timestamp.to_i
-    region_name = @region ? @region.name.to_s : "none"
+    group_name = @group ? @group.name.to_s : "none"
     status = "-"
     case current_status
       when "bound"
@@ -74,11 +74,11 @@ class ProjectRazor::Node < ProjectRazor::Object
       else
         status = "U"
     end
-    return @uuid, pretty_time(time_diff), status, region_name, "[#{temp_tags.join(",")}]", "[#{temp_custom_tags.join(",")}]"
+    return @uuid, pretty_time(time_diff), status, group_name, "[#{temp_tags.join(",")}]", "[#{temp_custom_tags.join(",")}]"
   end
 
   def print_item_header
-    return "UUID", "Last Checkin", "Status", "Region", "Tags", "Custom_tags", "Hardware IDs"
+    return "UUID", "Last Checkin", "Status", "Group", "Tags", "Custom_tags", "Hardware IDs"
   end
 
   def print_item
@@ -86,8 +86,8 @@ class ProjectRazor::Node < ProjectRazor::Object
     temp_tags = ["n/a"] if temp_tags == [] || temp_tags == nil
     temp_custom_tags = self.custom_tags
     temp_custom_tags = ["n/a"] if temp_custom_tags == [] || temp_custom_tags == nil    
-    region_name = @region ? @region.name.to_s : "none"
-    return @uuid, Time.at(@timestamp.to_i).strftime("%m-%d-%y %H:%M:%S"), current_status, region_name, 
+    group_name = @group ? @group.name.to_s : "none"
+    return @uuid, Time.at(@timestamp.to_i).strftime("%m-%d-%y %H:%M:%S"), current_status, group_name, 
         "[#{temp_tags.join(",")}]", "[#{temp_custom_tags.join(",")}]", "[#{hw_id.join(", ")}]"
   end
 

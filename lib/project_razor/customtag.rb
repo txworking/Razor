@@ -1,11 +1,11 @@
-class ProjectRazor::Tagname < ProjectRazor::Object
+class ProjectRazor::CustomTag < ProjectRazor::Object
 	attr_accessor :name
 	
 	# init
 	def initialize(hash)
 		super()
-		@_namespace = :tag_name
-		@noun       = :tag_name
+		@_namespace = :custom_tag
+		@noun       = :custom_tag
 		@name = "Tag Name : #{uuid}"
 
 		from_hash(hash)

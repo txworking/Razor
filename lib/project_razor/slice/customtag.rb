@@ -1,11 +1,11 @@
 module	ProjectRazor
 
 	class Slice
-		class Tagname < ProjectRazor::Slice
+		class CustomTag < ProjectRazor::Slice
 			def initialize(args)
 				super(args)
 		        @hidden          = false
-		        @slice_name      = "Tagname"
+		        @slice_name      = "CustomTag"
 
 		        # get the slice commands map for this slice (based on the set
 		        # of commands that are typical for most slices)
@@ -40,9 +40,9 @@ module	ProjectRazor
 			end
 
 			def get_tag_help
-		        return ["Tagname Slice:".red,
+		        return ["Custom_tag Slice:".red,
 		                "Used to view, create, update, and remove tags.".red,
-		                "Tagname commands:".yellow,
+		                "Custom_tag commands:".yellow,
 		                "\trazor tag [get] [all]                      " + "View all tags".yellow,
 		                "\trazor tag [get] (UUID)                     " + "View a specific tag".yellow,
 		                "\trazor tag add (options...)                 " + "Create a new tag".yellow,
@@ -58,15 +58,15 @@ module	ProjectRazor
 		        # filter expression was included as part of the web command
 		        @command_array.unshift(@prev_args.pop) if @web_command && @prev_args.peek(0) != "default" && @prev_args.peek(0) != "get"
 		        # Get all tag instances and print/return
-		        print_object_array get_object("tags", :tag_name), "Tags", :style => :table
+		        print_object_array get_object("tags", :custom_tag), "Tags", :style => :table
 			end
 
 			def get_tag_by_uuid
 		        @command = :get_tag_by_uuid
 		        # the UUID is the first element of the @command_array
 		        tag_uuid = @command_array.first
-		        tag = get_object("get_tag_by_uuid", :tag_name, tag_uuid)
-		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Tagname with UUID: [#{tag_uuid}]" unless tag && (tag.class != Array || tag.length > 0)
+		        tag = get_object("get_tag_by_uuid", :custom_tag, tag_uuid)
+		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Custom_tag with UUID: [#{tag_uuid}]" unless tag && (tag.class != Array || tag.length > 0)
 		        print_object_array [tag], "", :success_type => :generic
 			end
 
@@ -84,14 +84,14 @@ module	ProjectRazor
 		        # call is used to indicate whether the choice of options from the
 		        # option_items hash must be an exclusive choice)
 		        check_option_usage(option_items, options, includes_uuid, false)
-		        tag_tmp = return_objects_using_filter(:tag_name, {"name" => options[:name]})
+		        tag_tmp = return_objects_using_filter(:custom_tag, {"name" => options[:name]})
 		        if !tag_tmp.empty?
 		        	return print_object_array(tag_tmp, "", :success_type => :created)	
 		        end
 		        # create a new tag using the options that were passed into this subcommand,
 		        # then persist the tag object
-		        tag = ProjectRazor::Tagname.new({"@name" => options[:name]})
-		        raise(ProjectRazor::Error::Slice::CouldNotCreate, "Could not create Tagname") unless tag
+		        tag = ProjectRazor::CustomTag.new({"@name" => options[:name]})
+		        raise(ProjectRazor::Error::Slice::CouldNotCreate, "Could not create Custom_tag") unless tag
 		        setup_data
 		        @data.persist_object(tag)
 		        print_object_array([tag], "", :success_type => :created)
@@ -113,17 +113,17 @@ module	ProjectRazor
 		        check_option_usage(option_items, options, includes_uuid, false)
 
 		        # get the tag to update
-		        tag = get_object("tag_with_uuid", :tag_name, tag_uuid)
-		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Tagname with UUID: [#{tag_uuid}]" unless tag && (tag.class != Array || tag.length > 0)
+		        tag = get_object("tag_with_uuid", :custom_tag, tag_uuid)
+		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Custom_tag with UUID: [#{tag_uuid}]" unless tag && (tag.class != Array || tag.length > 0)
 
 		        #check unique
-				tag_tmp = return_objects_using_filter(:tag_name, {"name" => options[:name]})
+				tag_tmp = return_objects_using_filter(:custom_tag, {"name" => options[:name]})
 		        if !tag_tmp.empty? && tag_tmp[0].uuid != tag_uuid
-		        	raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not change to Tagname [#{options[:name]}]"
+		        	raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not change to Custom_tag [#{options[:name]}]"
 		        end
 
 		        tag.name = options[:name] if options[:name]
-		        raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not update Tagname [#{tag.uuid}]" unless tag.update_self
+		        raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not update Custom_tag [#{tag.uuid}]" unless tag.update_self
 		        print_object_array [tag], "", :success_type => :updated				
 			end
 
@@ -139,7 +139,7 @@ module	ProjectRazor
 		        rescue Exception
 		        	raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Tags" 
 		        end
-		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Tags" unless @data.delete_all_objects(:tag_name)	
+		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove all Tags" unless @data.delete_all_objects(:custom_tag)	
 		        slice_success("All Tags removed", :success_type => :removed)
 			end
 
@@ -147,8 +147,8 @@ module	ProjectRazor
 		        @command = :remove_tag_by_uuid
 		        # the UUID was the last "previous argument"
 		        tag_uuid = get_uuid_from_prev_args
-		        tag = get_object("tag_with_uuid", :tag_name, tag_uuid)
-		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Tagname with UUID: [#{tag_uuid}]" unless tag && (tag.class != Array || tag.length > 0)
+		        tag = get_object("tag_with_uuid", :custom_tag, tag_uuid)
+		        raise ProjectRazor::Error::Slice::InvalidUUID, "Cannot Find Custom_tag with UUID: [#{tag_uuid}]" unless tag && (tag.class != Array || tag.length > 0)
 		        setup_data
    		        begin
 					return_objects(:node).each do |node|
@@ -157,10 +157,10 @@ module	ProjectRazor
 		        		node.update_self
 			        end 
 		        rescue Exception
-		        	raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove  Tagname [#{tag.uuid}]" 
+		        	raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove  Custom_tag [#{tag.uuid}]" 
 		        end
-		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove Tagname [#{tag.uuid}]" unless @data.delete_object(tag)
-		        slice_success("Tagname [#{tag.uuid}] removed", :success_type => :removed)
+		        raise ProjectRazor::Error::Slice::CouldNotRemove, "Could not remove Custom_tag [#{tag.uuid}]" unless @data.delete_object(tag)
+		        slice_success("Custom_tag [#{tag.uuid}] removed", :success_type => :removed)
 			end
 
 		end

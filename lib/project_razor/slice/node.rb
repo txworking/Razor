@@ -133,18 +133,18 @@ module ProjectRazor
           options[:tags] = options[:tags].split(",") if options[:tags].is_a? String
           raise ProjectRazor::Error::Slice::MissingArgument, "node Tags [tag(,tag)]" unless options[:tags].count > 0
           options[:tags].uniq.each do |tag|
-            if return_objects_using_filter(:tag_name, {"name" => tag}).empty?
-              custom_tag = ProjectRazor::Tagname.new("@name" => tag)
+            if return_objects_using_filter(:custom_tag, {"name" => tag}).empty?
+              custom_tag = ProjectRazor::CustomTag.new("@name" => tag)
               setup_data
               @data.persist_object(custom_tag)
             end
           end
         end
-        if options[:region_uuid]
-          region = get_object("region_by_uuid", :region, options[:region_uuid])
-          raise ProjectRazor::Error::Slice::InvalidUUID, "Invalid Region UUID [#{options[:region_uuid]}]" unless region && (region.class != Array || region.length > 0)
+        if options[:group_uuid]
+          group = get_object("group_by_uuid", :group, options[:group_uuid])
+          raise ProjectRazor::Error::Slice::InvalidUUID, "Invalid Group UUID [#{options[:group_uuid]}]" unless group && (group.class != Array || group.length > 0)
         end
-        node.region = region if region
+        node.group = group if group
         node.custom_tags = options[:tags] if options[:tags]
         # Update object
         raise ProjectRazor::Error::Slice::CouldNotUpdate, "Could not update node [#{node.uuid}]" unless node.update_self

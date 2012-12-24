@@ -3,6 +3,6 @@
   :default: false
   :short_form: -n
   :long_form: --name NAME
-  :description: Name for the region being created
+  :description: Name for the group being created
   :uuid_is: not_allowed
   :required: true
