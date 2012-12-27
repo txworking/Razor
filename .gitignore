@@ -34,3 +34,5 @@ doc/
 /.settings
 /.tags*
 /Gemfile.lock
+
+/ext/packaging
