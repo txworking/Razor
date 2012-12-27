@@ -131,8 +131,7 @@ module ProjectRazor
               #TODO bind active_model to task
               get_tasks.each do |task|
                 if task.nodes.include? node.uuid
-                  task.active_models[pl.uuid] = "init"
-                  task.update_self
+                  task.bind_active(pl)
                 end
               end
               return

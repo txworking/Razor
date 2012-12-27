@@ -120,7 +120,11 @@ class ProjectRazor::Task < ProjectRazor::Object
     elsif action
       fsm_action(action)
     end
-    
+  end
+
+  def bind_active(active_model)
+    self.active_models[active_model.uuid] = "init"
+    self.update_self    
   end
 
 end
